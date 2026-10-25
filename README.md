@@ -4,8 +4,8 @@
 Este proyecto es una aplicación de escritorio desarrollada en Java Swing para la gestión de funcionarios y sus relaciones.
 
 # Autores
-Ximena Restrepo Grisales
-Sebastian Andres Rivera Padilla
+* Ximena Restrepo Grisales
+* Sebastian Andres Rivera Padilla
 
 ## Tecnologías utilizadas
 * Java (Swing)
