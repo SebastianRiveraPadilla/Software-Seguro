@@ -27,77 +27,84 @@ public class FuncionarioForm extends JFrame {
 
     private int idSeleccionado = -1;
 
-    public FuncionarioForm() {
-        setTitle("Gestión de Funcionarios - RRHH");
+        public FuncionarioForm() {
+        setTitle("Gestión de Funcionarios - IUDigital");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(1000, 700);
+        setSize(1100, 750); // Un poco más ancha para que respire mejor
         setLocationRelativeTo(null);
-        setLayout(new BorderLayout(10, 10));
+        
+        JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        add(crearPanelFormulario(), BorderLayout.NORTH);
-        add(crearPanelTablas(), BorderLayout.CENTER);
-        add(crearPanelBotones(), BorderLayout.SOUTH);
+        panelPrincipal.add(crearPanelFormulario(), BorderLayout.NORTH);
+        panelPrincipal.add(crearPanelTablas(), BorderLayout.CENTER);
+        panelPrincipal.add(crearPanelBotones(), BorderLayout.SOUTH);
+
+        setContentPane(panelPrincipal);
 
         cargarFuncionarios();
         limpiarFormulario();
     }
 
-    private JPanel crearPanelFormulario() {
+        private JPanel crearPanelFormulario() {
         JPanel p = new JPanel(new GridBagLayout());
         p.setBorder(BorderFactory.createTitledBorder("Datos del Funcionario"));
         GridBagConstraints g = new GridBagConstraints();
-        g.insets = new Insets(4, 6, 4, 6);
+        g.insets = new Insets(5, 5, 5, 5); // Márgenes entre componentes
         g.fill = GridBagConstraints.HORIZONTAL;
+        g.anchor = GridBagConstraints.WEST;
 
-        txtId = new JTextField(5); 
+        txtId = new JTextField(); 
         txtId.setEditable(false);
         cmbTipoId = new JComboBox<>(new String[]{"CC", "CE", "TI", "PA"});
-        txtNumId = new JTextField(15);
-        txtNombres = new JTextField(15);
-        txtApellidos = new JTextField(15);
+        txtNumId = new JTextField();
+        txtNombres = new JTextField();
+        txtApellidos = new JTextField();
         cmbEstadoCivil = new JComboBox<>(new String[]{"Soltero/a", "Casado/a", "Unión libre", "Separado/a", "Viudo/a"});
         cmbSexo = new JComboBox<>(new String[]{"M", "F", "Otro"});
-        txtDireccion = new JTextField(20);
-        txtTelefono = new JTextField(15);
-        txtFechaNac = new JTextField(12);
+        txtDireccion = new JTextField();
+        txtTelefono = new JTextField();
+        txtFechaNac = new JTextField();
         txtFechaNac.setToolTipText("Formato: yyyy-MM-dd (Ej: 1990-05-20)");
 
-        g.gridx = 0; g.gridy = 0; p.add(new JLabel("ID:"), g);
-        g.gridx = 1; p.add(txtId, g);
-        g.gridx = 2; p.add(new JLabel("Tipo ID:"), g);
-        g.gridx = 3; p.add(cmbTipoId, g);
-        g.gridx = 4; p.add(new JLabel("Número ID:"), g);
-        g.gridx = 5; p.add(txtNumId, g);
-
-        g.gridx = 0; g.gridy = 1; p.add(new JLabel("Nombres:"), g);
-        g.gridx = 1; p.add(txtNombres, g);
-        g.gridx = 2; p.add(new JLabel("Apellidos:"), g);
-        g.gridx = 3; p.add(txtApellidos, g);
-        g.gridx = 4; p.add(new JLabel("Estado Civil:"), g);
-        g.gridx = 5; p.add(cmbEstadoCivil, g);
-
-        g.gridx = 0; g.gridy = 2; p.add(new JLabel("Sexo:"), g);
-        g.gridx = 1; p.add(cmbSexo, g);
-        g.gridx = 2; p.add(new JLabel("Fecha Nac:"), g);
-        g.gridx = 3; p.add(txtFechaNac, g);
-        g.gridx = 4; p.add(new JLabel("Teléfono:"), g);
-        g.gridx = 5; p.add(txtTelefono, g);
-
-        g.gridx = 0; g.gridy = 3; p.add(new JLabel("Dirección:"), g);
-        g.gridx = 1; g.gridwidth = 5; p.add(txtDireccion, g);
+        int fila = 0;
+        
+        agregarCampo(p, g, "ID:", txtId, fila++, 0.1); // ID es pequeño
+        agregarCampo(p, g, "Tipo Identificación:", cmbTipoId, fila++, 0.3);
+        agregarCampo(p, g, "Número Identificación:", txtNumId, fila++, 0.3);
+        agregarCampo(p, g, "Nombres:", txtNombres, fila++, 1.0);
+        agregarCampo(p, g, "Apellidos:", txtApellidos, fila++, 1.0);
+        agregarCampo(p, g, "Estado Civil:", cmbEstadoCivil, fila++, 0.3);
+        agregarCampo(p, g, "Sexo:", cmbSexo, fila++, 0.3);
+        agregarCampo(p, g, "Dirección:", txtDireccion, fila++, 1.0);
+        agregarCampo(p, g, "Teléfono:", txtTelefono, fila++, 0.5);
+        agregarCampo(p, g, "Fecha Nac (YYYY-MM-DD):", txtFechaNac, fila++, 0.5);
 
         return p;
     }
 
-    private JTabbedPane crearPanelTablas() {
+    private void agregarCampo(JPanel p, GridBagConstraints g, String label, JComponent campo, int fila, double pesoAncho) {
+        g.gridy = fila;
+        
+        g.gridx = 0; 
+        g.weightx = 0; 
+        p.add(new JLabel(label), g);
+        
+        g.gridx = 1; 
+        g.weightx = pesoAncho; 
+        p.add(campo, g);
+    }
+
+        private JTabbedPane crearPanelTablas() {
         JTabbedPane tabs = new JTabbedPane();
 
         modeloFuncionarios = new DefaultTableModel(new Object[]{
-                "ID", "Tipo", "Número", "Nombres", "Apellidos", "Estado", "Sexo", "Teléfono", "Fecha Nac"}, 0) {
+                "ID", "Tipo", "Número", "Nombres", "Apellidos", "Estado Civil", "Sexo", "Dirección", "Teléfono", "F. Nac"}, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
         tablaFuncionarios = new JTable(modeloFuncionarios);
         tablaFuncionarios.setRowHeight(25);
+        
         tablaFuncionarios.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && tablaFuncionarios.getSelectedRow() >= 0) {
                 btnActualizar.setEnabled(true);
@@ -109,10 +116,11 @@ public class FuncionarioForm extends JFrame {
         });
         tabs.addTab("Funcionarios", new JScrollPane(tablaFuncionarios));
 
-        modeloGrupo = new DefaultTableModel(new Object[]{"Nombres", "Apellidos", "Rol", "Fecha Nac"}, 0) {
+        modeloGrupo = new DefaultTableModel(new Object[]{"Nombres", "Apellidos", "Rol", "F. Nac"}, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
         JPanel panelGrupo = new JPanel(new BorderLayout());
+        panelGrupo.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         lblAvisoGrupo = new JLabel("Seleccione un funcionario en la pestaña 'Funcionarios' para ver sus datos.", SwingConstants.CENTER);
         lblAvisoGrupo.setFont(new Font("Segoe UI", Font.ITALIC, 14));
         lblAvisoGrupo.setForeground(Color.GRAY);
@@ -125,6 +133,7 @@ public class FuncionarioForm extends JFrame {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
         JPanel panelAcademica = new JPanel(new BorderLayout());
+        panelAcademica.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         lblAvisoAcademica = new JLabel("Seleccione un funcionario en la pestaña 'Funcionarios' para ver sus datos.", SwingConstants.CENTER);
         lblAvisoAcademica.setFont(new Font("Segoe UI", Font.ITALIC, 14));
         lblAvisoAcademica.setForeground(Color.GRAY);
@@ -136,17 +145,21 @@ public class FuncionarioForm extends JFrame {
         return tabs;
     }
 
-    private JPanel crearPanelBotones() {
-        JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
-        btnNuevo = new JButton("Nuevo / Limpiar");
-        btnGuardar = new JButton("Guardar");
+        private JPanel crearPanelBotones() {
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        
+        btnNuevo = new JButton("Limpiar");
+        btnGuardar = new JButton("Guardar Nuevo");
         btnActualizar = new JButton("Actualizar");
         btnEliminar = new JButton("Eliminar");
 
         btnActualizar.setEnabled(false);
         btnEliminar.setEnabled(false);
 
-        p.add(btnNuevo); p.add(btnGuardar); p.add(btnActualizar); p.add(btnEliminar);
+        p.add(btnGuardar); 
+        p.add(btnActualizar); 
+        p.add(btnEliminar);
+        p.add(btnNuevo);
 
         btnNuevo.addActionListener(e -> limpiarFormulario());
         btnGuardar.addActionListener(e -> accionGuardar());
